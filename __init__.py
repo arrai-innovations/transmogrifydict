@@ -109,3 +109,46 @@ def resolve_path_to_value(source, path):
         if not found_value:
             break
     return found_value, mapped_value
+
+
+def resolve_mapping_to_dict(mapping, source):
+    """
+    turn the source into the destination using the mapping. see resolve_path_to_value for path string formats.
+
+    >>> mapping_dict = {
+    ...     'a': 'x[type=other_type].aa',
+    ...     'b': 'x[type=other_type].bb',
+    ...     'c': 'x[type=other_type].cc',
+    ... }
+    >>> source_dict = {
+    ...     'x': [
+    ...         {
+    ...             'type': 'some_type',
+    ...             'aa': '4',
+    ...             'bb': '5',
+    ...             'cc': '6'
+    ...         },
+    ...         {
+    ...             'type': 'other_type',
+    ...             'aa': '1',
+    ...             'bb': '2',
+    ...             'cc': '3'
+    ...         }
+    ...     ]
+    ... }
+    >>> resolve_mapping_to_dict(mapping_dict, source_dict)
+    {'a': '1', 'b': '2', 'c': '3'}
+
+    :param mapping: values are paths to find the corresponding value in `source`, keys are were to store said values
+    :type mapping: dict
+    :param source: potentially holds the desired values
+    :type source: dict
+    :returns: destination dict, containing any found values
+    :rtype: dict
+    """
+    destination_dict = {}
+    for destination_key, path in mapping.items():
+        found_value, mapped_value = resolve_path_to_value(source, path)
+        if found_value:
+            destination_dict[destination_key] = mapped_value
+    return destination_dict
