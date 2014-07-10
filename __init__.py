@@ -113,7 +113,8 @@ def resolve_path_to_value(source, path):
 
 def resolve_mapping_to_dict(mapping, source):
     """
-    turn the source into the destination using the mapping. see resolve_path_to_value for path string formats.
+    move values from `source` into a returned dict, using `mapping` for paths and returned keys.
+    see resolve_path_to_value for path string formats.
 
     >>> mapping_dict = {
     ...     'a': 'x[type=other_type].aa',
