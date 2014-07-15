@@ -1,3 +1,5 @@
+import json
+
 def resolve_path_to_value(source, path):
     """
     fetch a value out of `source` using `path` as the pointer to the desired value.
@@ -78,6 +80,13 @@ def resolve_path_to_value(source, path):
     for path_part in path.split('.'):
         parts = path_part.split('[')
         try:
+            if isinstance(mapped_value, basestring):
+                # ugh, maybe it is json?
+                try:
+                    mapped_value = json.loads(mapped_value)
+                except ValueError:
+                    found_value = False
+                    break
             mapped_value = mapped_value[parts[0]]
         except KeyError:
             found_value = False
