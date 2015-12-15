@@ -1,5 +1,6 @@
 import json
 
+
 def resolve_path_to_value(source, path):
     """
     fetch a value out of `source` using `path` as the pointer to the desired value.
