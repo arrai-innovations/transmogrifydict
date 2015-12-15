@@ -70,7 +70,7 @@ def resolve_path_to_value(source, path):
     :param source: potentially holds the desired value
     :type source: dict
     :param path: points to the desired value
-    :type path: str
+    :type path: basestring
     :returns: a boolean indicating found status, the value that was found
     :rtype: tuple
     :raises ValueError: if we don't understand what went inside some square brackets.
