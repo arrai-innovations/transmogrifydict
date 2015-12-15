@@ -15,7 +15,10 @@ def resolve_path_to_value(source, path):
     - find dict in array using sub keys
       key[Key~SubKey=Value]
 
-    example:
+    if the substring `Value` `isdigit()`, we look for an `int` version. You can wrap `'8'` into `'"8"'` to find the
+     basestring version.
+
+    examples:
     >>> source_dict = {
     ...     'first_key': 'a',
     ...     'second_key' : [
@@ -26,11 +29,13 @@ def resolve_path_to_value(source, path):
     ...     'third_key' : [
     ...         {
     ...             'b': 1,
-    ...             'c': 2
+    ...             'c': 2,
+    ...             'h': 'asdf'
     ...         },
     ...         {
     ...             'b': 3,
-    ...             'c': 4
+    ...             'c': 4,
+    ...             'h': 'qw"er'
     ...         }
     ...     ],
     ...     'fourth_key': [
@@ -57,15 +62,17 @@ def resolve_path_to_value(source, path):
     ...     ]
     ... }
     >>> resolve_path_to_value(source_dict, 'first_key')
-    'a'
+    (True, 'a')
     >>> resolve_path_to_value(source_dict, 'second_key[1]')
-    True, 'y'
+    (True, 'y')
     >>> resolve_path_to_value(source_dict, 'third_key[b=3]')
-    {'c': 2, 'b': 1}
-    >>> resolve_path_to_value(source_dict, 'third_key[b=3].c')
-    2
-    >>> resolve_path_to_value(source_dict, 'fourth_key[d~g=8].d.f')
-    7
+    (True, {'h': 'qw"er', 'c': 4, 'b': 3})
+    >>> resolve_path_to_value(source_dict, 'third_key[h="qw"er"]')
+    (True, {'h': 'qw"er', 'c': 4, 'b': 3})
+    >>> resolve_path_to_value(source_dict, 'third_key[h=asdf].c')
+    (True, 2)
+    >>> resolve_path_to_value(source_dict, 'fourth_key[d~g=6].e.f')
+    (True, 7)
 
     :param source: potentially holds the desired value
     :type source: dict
@@ -102,13 +109,22 @@ def resolve_path_to_value(source, path):
             elif '=' in array_part:
                 # [Key=Value] or [Key~SubKey=Value]
                 find_key, find_value = array_part.split('=')
+                if find_value.isdigit():
+                    find_value = int(find_value)
+                elif find_value.startswith('"') and find_value.endswith('"'):
+                    find_value = find_value[1:-1]
                 for item in hasattr(mapped_value, 'keys') and [mapped_value] or mapped_value:
                     sub_item = item
-                    for sub_key in find_key.split('~'):
-                        sub_item = sub_item[sub_key]
-                    if sub_item == find_value:
-                        mapped_value = item
-                        break
+                    sub_keys = find_key.split('~')
+                    try:
+                        while sub_keys:
+                            sub_item = sub_item[sub_keys.pop(0)]
+                    except KeyError, IndexError:
+                        pass
+                    else:
+                        if sub_item == find_value:
+                            mapped_value = item
+                            break
                 else:
                     # raise KeyError('no item with %r == %r' % (find_key, find_value))
                     found_value = False
@@ -148,7 +164,7 @@ def resolve_mapping_to_dict(mapping, source):
     ...     ]
     ... }
     >>> resolve_mapping_to_dict(mapping_dict, source_dict)
-    {'a': '1', 'b': '2', 'c': '3'}
+    {'a': '1', 'c': '3', 'b': '2'}
 
     :param mapping: values are paths to find the corresponding value in `source`, keys are were to store said values
     :type mapping: dict
