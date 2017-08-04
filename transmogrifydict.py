@@ -17,7 +17,7 @@ def resolve_path_to_value(source, path):
       key[Key~SubKey=Value]
 
     if the substring `Value` `isdigit()`, we look for an `int` version. You can wrap `'8'` into `'"8"'` to find the
-     six.string_types version.
+     `string` version.
 
     examples:
     >>> source_dict = {
