@@ -143,12 +143,12 @@ def resolve_mapping_to_dict(mapping, source):
     move values from `source` into a returned dict, using `mapping` for paths and returned keys.
     see resolve_path_to_value for path string formats.
 
-    >>> mapping_dict = {
+    >>> mapping = {
     ...     'a': 'x[type=other_type].aa',
-    ...     'b': 'x[type=other_type].bb',
+    ...     'b': 'x[type=some_type].bb',
     ...     'c': 'x[type=other_type].cc',
     ... }
-    >>> source_dict = {
+    >>> source = {
     ...     'x': [
     ...         {
     ...             'type': 'some_type',
@@ -164,8 +164,8 @@ def resolve_mapping_to_dict(mapping, source):
     ...         }
     ...     ]
     ... }
-    >>> resolve_mapping_to_dict(mapping_dict, source_dict)
-    {'a': '1', 'c': '3', 'b': '2'}
+    >>> resolve_mapping_to_dict(mapping, source)
+    {'a': '1', 'c': '3', 'b': '5'}
 
     :param mapping: values are paths to find the corresponding value in `source`, keys are were to store said values
     :type mapping: dict
