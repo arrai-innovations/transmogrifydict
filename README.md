@@ -4,8 +4,11 @@ The "turn a dict from one API into a dict for another" python module.
 
 ![That dict is so cool...](/transmogrifydict.png)
 
-Py2: [![Python 2 Build Status](https://semaphoreci.com/api/v1/emergence/transmogrifydict-py2/branches/master/badge.svg)](https://semaphoreci.com/emergence/transmogrifydict-py2)
-Py3: [![Python 3 Build Status](https://semaphoreci.com/api/v1/emergence/transmogrifydict-py3/branches/master/badge.svg)](https://semaphoreci.com/emergence/transmogrifydict-py3)
+Py2: [![Python 2 Build Status](https://semaphoreci.com/api/v1/emergence/transmogrifydict-py2/branches/master/shields_badge.svg)](https://semaphoreci.com/emergence/transmogrifydict-py2)
+Py3: [![Python 3 Build Status](https://semaphoreci.com/api/v1/emergence/transmogrifydict-py3/branches/master/shields_badge.svg)](https://semaphoreci.com/emergence/transmogrifydict-py3)
+
+Py2: [![Python 2 Coverage](https://docs.emergence.com/transmogrifydict/py2-coverage/coverage.svg)](https://docs.emergence.com/transmogrifydict/py2-coverage/)
+Py3: [![Python 3 Coverage](https://docs.emergence.com/transmogrifydict/py3-coverage/coverage.svg)](https://docs.emergence.com/transmogrifydict/py3-coverage/)
 
 ## methods
 
