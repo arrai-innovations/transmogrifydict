@@ -1,4 +1,5 @@
 import json
+import six
 
 
 def resolve_path_to_value(source, path):
@@ -16,7 +17,7 @@ def resolve_path_to_value(source, path):
       key[Key~SubKey=Value]
 
     if the substring `Value` `isdigit()`, we look for an `int` version. You can wrap `'8'` into `'"8"'` to find the
-     basestring version.
+     six.string_types version.
 
     examples:
     >>> source_dict = {
@@ -77,7 +78,7 @@ def resolve_path_to_value(source, path):
     :param source: potentially holds the desired value
     :type source: dict
     :param path: points to the desired value
-    :type path: basestring
+    :type path: six.string_types
     :returns: a boolean indicating found status, the value that was found
     :rtype: tuple
     :raises ValueError: if we don't understand what went inside some square brackets.
@@ -88,7 +89,7 @@ def resolve_path_to_value(source, path):
     for path_part in path.split('.'):
         parts = path_part.split('[')
         try:
-            if isinstance(mapped_value, basestring):
+            if isinstance(mapped_value, six.string_types):
                 # ugh, maybe it is json?
                 try:
                     mapped_value = json.loads(mapped_value)
@@ -119,7 +120,7 @@ def resolve_path_to_value(source, path):
                     try:
                         while sub_keys:
                             sub_item = sub_item[sub_keys.pop(0)]
-                    except KeyError, IndexError:
+                    except (KeyError, IndexError):
                         pass
                     else:
                         if sub_item == find_value:
