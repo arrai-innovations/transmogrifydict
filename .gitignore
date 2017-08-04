@@ -4,3 +4,4 @@ dist
 *.egg-info
 venv
 venvpy3
+.eggs
