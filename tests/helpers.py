@@ -1,8 +1,8 @@
 from unittest import TestCase
-import six
-if six.PY3:
+try:
     from functools import partialmethod
-else:
+except ImportError:
+    # Partial method for Python 2.7 - https://gist.github.com/carymrobbins/8940382
     from functools import partial
 
     # noinspection PyPep8Naming
