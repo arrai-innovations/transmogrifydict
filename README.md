@@ -1,6 +1,6 @@
 # transmogrifydict
 
-The "turn a dict from one API into a dict for another" python module.
+The "map a dict from one API into a dict for another" python module.
 
 ![That dict is so cool...](/transmogrifydict.png)
 
