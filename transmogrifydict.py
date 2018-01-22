@@ -1,9 +1,32 @@
 import json
 import six
+import re
+
+# (?<!\\) - don't match leading slashes
+# (?:\\\\)* - allow any even number of slashes
+# (\.) - capture the actual separator
+PERIOD_SPLIT = re.compile(r'(?<!\\)(?:\\\\)*(\.)')
+OPEN_SQUARE_BRACKET_SPLIT = re.compile(r'(?<!\\)(?:\\\\)*(\[)')
+EQUAL_SPLIT = re.compile(r'(?<!\\)(?:\\\\)*(=)')
+TIDLE_SPLIT = re.compile(r'(?<!\\)(?:\\\\)*(~)')
+
+SINGLE_SLASH = re.compile(r'(?<!\\)(\\)')
+
+
+def non_quoted_split(regex, string):
+    indices = list(regex.finditer(string))
+    retval = []
+    for x, y in zip([None]+indices, indices+[None]):
+        retval.append(string[x.end(1) if x else 0:y.start(1) if y else None])
+    return retval
+
+
+def un_slash_escape(string):
+    return SINGLE_SLASH.sub('', string).replace('\\\\', '\\')
 
 
 def resolve_path_to_value(source, path):
-    """
+    r"""
     fetch a value out of `source` using `path` as the pointer to the desired value.
 
     a `path` should be in one of or a combination of the following formats:
@@ -22,44 +45,27 @@ def resolve_path_to_value(source, path):
     examples:
     >>> source_dict = {
     ...     'first_key': 'a',
-    ...     'second_key' : [
-    ...         'x',
-    ...         'y',
-    ...         'z',
-    ...     ],
+    ...     'second_key' : ['x', 'y', 'z'],
     ...     'third_key' : [
-    ...         {
-    ...             'b': 1,
-    ...             'c': 2,
-    ...             'h': 'asdf'
-    ...         },
-    ...         {
-    ...             'b': 3,
-    ...             'c': 4,
-    ...             'h': 'qw"er'
-    ...         }
+    ...         {'c': 'asdf'},
+    ...         {'b': 3},
+    ...         {'h': 'qw"er'}
     ...     ],
     ...     'fourth_key': [
     ...         {
-    ...             'd': {
-    ...                 'f': 5,
-    ...                 'g': 6
-    ...             },
-    ...             'e': {
-    ...                 'f': 7,
-    ...                 'g': 8
-    ...             }
+    ...             'd': {'f': 5, 'g': 6},
+    ...             'e': {'f': 7, 'g': 8}
     ...         },
     ...         {
-    ...             'd': {
-    ...                 'f': 9,
-    ...                 'g': 10
-    ...             },
-    ...             'e': {
-    ...                 'f': 11,
-    ...                 'g': 12
-    ...             }
+    ...             'd': {'f': 9, 'g': 10},
+    ...             'e': {'f': 11, 'g': 12}
     ...         }
+    ...     ],
+    ...     'fifth_key': [
+    ...         {'b.c': '9.a'},
+    ...         {'b[c': '9[a'},
+    ...         {'b]c': '9]a'},
+    ...         {'b\c': '9\\a'},
     ...     ]
     ... }
     >>> resolve_path_to_value(source_dict, 'first_key')
@@ -67,13 +73,21 @@ def resolve_path_to_value(source, path):
     >>> resolve_path_to_value(source_dict, 'second_key[1]')
     (True, 'y')
     >>> resolve_path_to_value(source_dict, 'third_key[b=3]')
-    (True, {'h': 'qw"er', 'c': 4, 'b': 3})
-    >>> resolve_path_to_value(source_dict, 'third_key[h="qw"er"]')
-    (True, {'h': 'qw"er', 'c': 4, 'b': 3})
-    >>> resolve_path_to_value(source_dict, 'third_key[h=asdf].c')
-    (True, 2)
+    (True, {'b': 3})
+    >>> resolve_path_to_value(source_dict, 'third_key[h=qw"er]')
+    (True, {'h': 'qw"er'})
+    >>> resolve_path_to_value(source_dict, 'third_key[c=asdf].c')
+    (True, 'asdf')
     >>> resolve_path_to_value(source_dict, 'fourth_key[d~g=6].e.f')
     (True, 7)
+    >>> resolve_path_to_value(source_dict, r'fifth_key[b\.c=9\.a].b\.c')
+    (True, '9.a')
+    >>> resolve_path_to_value(source_dict, r'fifth_key[b\[c=9\[a].b\[c')
+    (True, '9[a')
+    >>> resolve_path_to_value(source_dict, r'fifth_key[b\]c=9\]a].b\]c')
+    (True, '9]a')
+    >>> resolve_path_to_value(source_dict, r'fifth_key[b\\c=9\\a].b\\c')
+    (True, '9\\a')
 
     :param source: potentially holds the desired value
     :type source: dict
@@ -85,9 +99,19 @@ def resolve_path_to_value(source, path):
     """
     mapped_value = source
     found_value = True
-    # noinspection PyUnresolvedReferences
-    for path_part in path.split('.'):
-        parts = path_part.split('[')
+
+    path_parts = non_quoted_split(PERIOD_SPLIT, path)
+
+    for path_part_raw in path_parts:
+        # split on non quoted open bracket
+
+        parts = non_quoted_split(OPEN_SQUARE_BRACKET_SPLIT, path_part_raw)
+        key = parts[0]
+        array = parts[1:]
+        # future: when dropping python 2 support do this instead.
+        #key, *array = non_quoted_split(OPEN_SQUARE_BRACKET_SPLIT, path_part_raw)
+
+        key = un_slash_escape(key)
         try:
             if isinstance(mapped_value, six.string_types):
                 # ugh, maybe it is json?
@@ -96,12 +120,12 @@ def resolve_path_to_value(source, path):
                 except ValueError:
                     found_value = False
                     break
-            mapped_value = mapped_value[parts[0]]
+            mapped_value = mapped_value[key]
         except KeyError:
             found_value = False
             break
-        for array_part_raw in parts[1:]:
-            array_part = array_part_raw[:-1]
+        for array_part_raw in array:
+            array_part = array_part_raw.strip(']')
             if array_part.isdigit():
                 # [0]
                 if hasattr(mapped_value, 'keys'):
@@ -109,17 +133,28 @@ def resolve_path_to_value(source, path):
                 mapped_value = mapped_value[int(array_part)]
             elif '=' in array_part:
                 # [Key=Value] or [Key~SubKey=Value]
-                find_key, find_value = array_part.split('=')
+                # split on non quoted equals signs
+                equal_parts = non_quoted_split(EQUAL_SPLIT, array_part)
+                find_key = equal_parts[0]
+                find_value = equal_parts[1:]
+                # future: when dropping python 2 support do this instead.
+                #find_key, *find_value = non_quoted_split(EQUAL_SPLIT, array_part)
+                if len(find_value) >= 2:
+                    raise ValueError('too many unquoted equals signs in square brackets for {}'.format(array_part))
+                find_value = find_value[0]
                 if find_value.isdigit():
                     find_value = int(find_value)
                 elif find_value.startswith('"') and find_value.endswith('"'):
                     find_value = find_value[1:-1]
-                for item in hasattr(mapped_value, 'keys') and [mapped_value] or mapped_value:
+                if isinstance(find_value, six.string_types):
+                    find_value = un_slash_escape(find_value)
+                for item in [mapped_value] if hasattr(mapped_value, 'keys') else mapped_value:
                     sub_item = item
-                    sub_keys = find_key.split('~')
+                    sub_keys = non_quoted_split(TIDLE_SPLIT, find_key)
                     try:
                         while sub_keys:
-                            sub_item = sub_item[sub_keys.pop(0)]
+                            sub_key = un_slash_escape(sub_keys.pop(0))
+                            sub_item = sub_item[sub_key]
                     except (KeyError, IndexError):
                         pass
                     else:
