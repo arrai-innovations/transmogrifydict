@@ -81,7 +81,8 @@ def resolve_path_to_value(source, path):
     ...         ]
     ...     },
     ...     'seventh_key': {
-    ...         'bad_api': '{"z":1,"y":2,"x":3}'
+    ...         'bad_api': '{"z":1,"y":2,"x":3}',
+    ...         'bad_json': '{"z":1!"y":2,"x":3}',
     ...     }
     ... }
     >>> resolve_path_to_value(source_dict, 'zero_key')[0]
@@ -143,6 +144,10 @@ def resolve_path_to_value(source, path):
     Traceback (most recent call last):
         ...
     ValueError: array expected at 'seventh_key', found dict-like object.
+    >>> resolve_path_to_value(source_dict, 'seventh_key.bad_json.z')
+    Traceback (most recent call last):
+        ...
+    ValueError: string found when looking for dict-like object at 'seventh_key.bad_json'. failed to convert to json.
 
     :param source: potentially holds the desired value
     :type source: dict
@@ -174,8 +179,11 @@ def resolve_path_to_value(source, path):
                 try:
                     mapped_value = json.loads(mapped_value)
                 except ValueError:
-                    found_value = False
-                    break
+                    raise ValueError(
+                        'string found when looking for dict-like object at {!r}. failed to convert to json.'.format(
+                            '.'.join(path_parts[:path_parts_index])
+                        )
+                    )
             if not hasattr(mapped_value, 'keys'):
                 found_value = False
                 break
