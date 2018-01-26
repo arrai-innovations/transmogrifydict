@@ -128,6 +128,10 @@ def resolve_path_to_value(source, path):
     Traceback (most recent call last):
         ...
     ValueError: Expected square brackets to have be either "[number]", "[key=value]", "[key~subkey=value]" or "[]". got: 'bad-squares'
+    >>> resolve_path_to_value(source_dict, 'seventh_key.bad_api[a=b=c=]')
+    Traceback (most recent call last):
+        ...
+    ValueError: too many unquoted equals signs in square brackets for 'a=b=c='
 
     :param source: potentially holds the desired value
     :type source: dict
@@ -184,7 +188,7 @@ def resolve_path_to_value(source, path):
                 # future: when dropping python 2 support do this instead.
                 #find_key, *find_value = _non_quoted_split(EQUAL_SPLIT, array_part)
                 if len(find_value) >= 2:
-                    raise ValueError('too many unquoted equals signs in square brackets for {}'.format(array_part))
+                    raise ValueError('too many unquoted equals signs in square brackets for {!r}'.format(array_part))
                 find_value = find_value[0]
                 if find_value.isdigit():
                     find_value = int(find_value)
