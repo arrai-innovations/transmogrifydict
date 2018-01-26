@@ -78,7 +78,8 @@ def resolve_path_to_value(source, path):
     ...             {'d':100},
     ...             {'d':{'e': 3}},
     ...             {'d':{'e': 2}},
-    ...         ]
+    ...         ],
+    ...         'f': []
     ...     },
     ...     'seventh_key': {
     ...         'bad_api': '{"z":1,"y":2,"x":3}',
@@ -121,6 +122,12 @@ def resolve_path_to_value(source, path):
     (True, [6, 5, 4])
     >>> resolve_path_to_value(source_dict, 'sixth_key.c[].d.e')
     (True, [3, 2])
+    >>> resolve_path_to_value(source_dict, 'sixth_key.f')
+    (True, [])
+    >>> resolve_path_to_value(source_dict, 'sixth_key.f[]')
+    (True, [])
+    >>> resolve_path_to_value(source_dict, 'sixth_key.f[].g')
+    (False, [])
     >>> resolve_path_to_value(source_dict, 'seventh_key.bad_api.x')
     (True, 3)
     >>> results = resolve_path_to_value(source_dict, 'seventh_key.bad_api.a')
@@ -248,6 +255,8 @@ def resolve_path_to_value(source, path):
                         '.'.join(path_parts[:path_parts_index] + [key])
                     ))
                 if not mapped_value:
+                    if path_parts[path_parts_index+1:]:
+                        found_value = False
                     path_parts_break = True  # break the outer loop, we are done here.
                     break
                 remainder = '.'.join(path_parts[path_parts_index+1:])
