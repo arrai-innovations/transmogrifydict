@@ -122,6 +122,8 @@ def resolve_path_to_value(source, path):
     (True, [6, 5, 4])
     >>> resolve_path_to_value(source_dict, 'sixth_key.c[].d.e')
     (True, [3, 2])
+    >>> resolve_path_to_value(source_dict, 'sixth_key.c[].x')
+    (False, [])
     >>> resolve_path_to_value(source_dict, 'sixth_key.f')
     (True, [])
     >>> resolve_path_to_value(source_dict, 'sixth_key.f[]')
