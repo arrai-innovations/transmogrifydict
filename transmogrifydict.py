@@ -93,7 +93,7 @@ def resolve_path_to_value(source, path):
     >>> resolve_path_to_value(source_dict, 'second_key[4]')
     Traceback (most recent call last):
         ...
-    IndexError: list index out of range
+    IndexError: index 4 out of range on array at 'second_key'.g s
     >>> resolve_path_to_value(source_dict, 'third_key[b=3]')
     (True, {'b': 3})
     >>> resolve_path_to_value(source_dict, 'third_key[b=4]')[0]
@@ -135,6 +135,14 @@ def resolve_path_to_value(source, path):
     Traceback (most recent call last):
         ...
     ValueError: too many unquoted equals signs in square brackets for 'a=b=c='
+    >>> resolve_path_to_value(source_dict, 'seventh_key[0]')
+    Traceback (most recent call last):
+        ...
+    ValueError: array expected at 'seventh_key', found dict-like object.
+    >>> resolve_path_to_value(source_dict, 'seventh_key[]')
+    Traceback (most recent call last):
+        ...
+    ValueError: array expected at 'seventh_key', found dict-like object.
 
     :param source: potentially holds the desired value
     :type source: dict
@@ -179,9 +187,17 @@ def resolve_path_to_value(source, path):
             array_part = array_part_raw.strip(']')
             if array_part.isdigit():
                 # [0]
-                if hasattr(mapped_value, 'keys'):
-                    break
-                mapped_value = mapped_value[int(array_part)]
+                try:
+                    mapped_value = mapped_value[int(array_part)]
+                except KeyError:
+                    raise ValueError('array expected at {!r}, found dict-like object.'.format(
+                        '.'.join(path_parts[:path_parts_index] + [key])
+                    ))
+                except IndexError:
+                    raise IndexError('index {!r} out of range on array at {!r}.'.format(
+                        int(array_part),
+                        '.'.join(path_parts[:path_parts_index] + [key])
+                    ))
             elif '=' in array_part:
                 # [Key=Value] or [Key~SubKey=Value]
                 # split on non quoted equals signs
@@ -220,9 +236,9 @@ def resolve_path_to_value(source, path):
             elif array_part == '':
                 # empty []
                 if hasattr(mapped_value, 'keys'):
-                    found_value = False
-                    path_parts_break = True  # break the outer loop, we are done here.
-                    break
+                    raise ValueError('array expected at {!r}, found dict-like object.'.format(
+                        '.'.join(path_parts[:path_parts_index] + [key])
+                    ))
                 if not mapped_value:
                     path_parts_break = True  # break the outer loop, we are done here.
                     break
