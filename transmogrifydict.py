@@ -78,6 +78,9 @@ def resolve_path_to_value(source, path):
     ...             {'d':{'e': 3}},
     ...             {'d':{'e': 2}},
     ...         ]
+    ...     },
+    ...     'seventh_key': {
+    ...         'bad_api': '{"z":1,"y":2,"x":3}'
     ...     }
     ... }
     >>> resolve_path_to_value(source_dict, 'first_key')
@@ -104,6 +107,8 @@ def resolve_path_to_value(source, path):
     (True, [6, 5, 4])
     >>> resolve_path_to_value(source_dict, 'sixth_key.c[].d.e')
     (True, [3, 2])
+    >>> resolve_path_to_value(source_dict, 'seventh_key.bad_api.x')
+    (True, 3)
 
     :param source: potentially holds the desired value
     :type source: dict
