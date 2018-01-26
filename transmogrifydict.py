@@ -66,7 +66,19 @@ def resolve_path_to_value(source, path):
     ...         {'b[c': '9[a'},
     ...         {'b]c': '9]a'},
     ...         {'b\c': '9\\a'},
-    ...     ]
+    ...     ],
+    ...     'sixth_key': {
+    ...         'a': [
+    ...             {'b':6},
+    ...             {'b':5},
+    ...             {'b':4},
+    ...         ],
+    ...         'c': [
+    ...             {'d':100},
+    ...             {'d':{'e': 3}},
+    ...             {'d':{'e': 2}},
+    ...         ]
+    ...     }
     ... }
     >>> resolve_path_to_value(source_dict, 'first_key')
     (True, 'a')
@@ -88,6 +100,10 @@ def resolve_path_to_value(source, path):
     (True, '9]a')
     >>> resolve_path_to_value(source_dict, r'fifth_key[b\\c=9\\a].b\\c')
     (True, '9\\a')
+    >>> resolve_path_to_value(source_dict, 'sixth_key.a[].b')
+    (True, [6, 5, 4])
+    >>> resolve_path_to_value(source_dict, 'sixth_key.c[].d.e')
+    (True, [3, 2])
 
     :param source: potentially holds the desired value
     :type source: dict
@@ -99,10 +115,11 @@ def resolve_path_to_value(source, path):
     """
     mapped_value = source
     found_value = True
+    went_recursive = False
 
     path_parts = non_quoted_split(PERIOD_SPLIT, path)
 
-    for path_part_raw in path_parts:
+    for path_parts_index, path_part_raw in enumerate(path_parts):
         # split on non quoted open bracket
 
         parts = non_quoted_split(OPEN_SQUARE_BRACKET_SPLIT, path_part_raw)
@@ -120,6 +137,9 @@ def resolve_path_to_value(source, path):
                 except ValueError:
                     found_value = False
                     break
+            if not hasattr(mapped_value, 'keys'):
+                found_value = False
+                break
             mapped_value = mapped_value[key]
         except KeyError:
             found_value = False
@@ -165,9 +185,24 @@ def resolve_path_to_value(source, path):
                     # raise KeyError('no item with %r == %r' % (find_key, find_value))
                     found_value = False
                     break
+            elif array_part == '':
+                # empty []
+                if hasattr(mapped_value, 'keys'):
+                    break
+                if not mapped_value:
+                    break
+                remainder = '.'.join(path_parts[path_parts_index+1:])
+                mapped_value = [resolve_path_to_value(x, remainder) for x in mapped_value]
+                mapped_value = [value for found, value in mapped_value if found]
+                went_recursive = True  # break the outer loop, we are done here.
+                if not mapped_value:
+                    found_value = False
+                break
             else:
                 raise ValueError('Expected square brackets to have be either "[number]", or "[key=value]" or '
                                  '"[key~subkey=value]". got: %r' % array_part)
+        if went_recursive:
+            break
         if not found_value:
             break
     return found_value, mapped_value
@@ -199,8 +234,8 @@ def resolve_mapping_to_dict(mapping, source):
     ...         }
     ...     ]
     ... }
-    >>> resolve_mapping_to_dict(mapping, source)
-    {'a': '1', 'c': '3', 'b': '5'}
+    >>> resolve_mapping_to_dict(mapping, source) == {'a': '1', 'b': '5', 'c': '3'}
+    True
 
     :param mapping: values are paths to find the corresponding value in `source`, keys are were to store said values
     :type mapping: dict
