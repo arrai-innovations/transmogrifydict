@@ -204,8 +204,8 @@ def resolve_path_to_value(source, path):
                     found_value = False
                 break
             else:
-                raise ValueError('Expected square brackets to have be either "[number]", or "[key=value]" or '
-                                 '"[key~subkey=value]". got: %r' % array_part)
+                raise ValueError('Expected square brackets to have be either "[number]", "[key=value]", '
+                                 '"[key~subkey=value]" or "[]". got: %r' % array_part)
         if went_recursive:
             break
         if not found_value:
