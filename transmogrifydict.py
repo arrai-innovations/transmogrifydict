@@ -93,7 +93,7 @@ def resolve_path_to_value(source, path):
     >>> resolve_path_to_value(source_dict, 'second_key[4]')
     Traceback (most recent call last):
         ...
-    IndexError: index 4 out of range on array at 'second_key'.g s
+    IndexError: index 4 out of range on array at 'second_key'.
     >>> resolve_path_to_value(source_dict, 'third_key[b=3]')
     (True, {'b': 3})
     >>> resolve_path_to_value(source_dict, 'third_key[b=4]')[0]
