@@ -83,16 +83,26 @@ def resolve_path_to_value(source, path):
     ...         'bad_api': '{"z":1,"y":2,"x":3}'
     ...     }
     ... }
+    >>> resolve_path_to_value(source_dict, 'zero_key')[0]
+    False
     >>> resolve_path_to_value(source_dict, 'first_key')
     (True, 'a')
     >>> resolve_path_to_value(source_dict, 'second_key[1]')
     (True, 'y')
+    >>> resolve_path_to_value(source_dict, 'second_key[4]')
+    Traceback (most recent call last):
+        ...
+    IndexError: list index out of range
     >>> resolve_path_to_value(source_dict, 'third_key[b=3]')
     (True, {'b': 3})
+    >>> resolve_path_to_value(source_dict, 'third_key[b=4]')[0]
+    False
     >>> resolve_path_to_value(source_dict, 'third_key[h=qw"er]')
     (True, {'h': 'qw"er'})
     >>> resolve_path_to_value(source_dict, 'third_key[c=asdf].c')
     (True, 'asdf')
+    >>> resolve_path_to_value(source_dict, 'third_key[c=asdf].b')
+    (False, {'c': 'asdf'})
     >>> resolve_path_to_value(source_dict, 'fourth_key[d~g=6].e.f')
     (True, 7)
     >>> resolve_path_to_value(source_dict, r'fifth_key[b\.c=9\.a].b\.c')
@@ -109,6 +119,15 @@ def resolve_path_to_value(source, path):
     (True, [3, 2])
     >>> resolve_path_to_value(source_dict, 'seventh_key.bad_api.x')
     (True, 3)
+    >>> results = resolve_path_to_value(source_dict, 'seventh_key.bad_api.a')
+    >>> results[0]
+    False
+    >>> results[1] == {'x': 3, 'y': 2, 'z': 1}
+    True
+    >>> resolve_path_to_value(source_dict, 'seventh_key.bad_api[bad-squares]')
+    Traceback (most recent call last):
+        ...
+    ValueError: Expected square brackets to have be either "[number]", "[key=value]", "[key~subkey=value]" or "[]". got: 'bad-squares'
 
     :param source: potentially holds the desired value
     :type source: dict
@@ -120,7 +139,7 @@ def resolve_path_to_value(source, path):
     """
     mapped_value = source
     found_value = True
-    went_recursive = False
+    path_parts_break = False
 
     path_parts = _non_quoted_split(PERIOD_SPLIT, path)
 
@@ -189,26 +208,28 @@ def resolve_path_to_value(source, path):
                 else:
                     # raise KeyError('no item with %r == %r' % (find_key, find_value))
                     found_value = False
+                    path_parts_break = True  # break the outer loop, we are done here.
                     break
             elif array_part == '':
                 # empty []
                 if hasattr(mapped_value, 'keys'):
+                    found_value = False
+                    path_parts_break = True  # break the outer loop, we are done here.
                     break
                 if not mapped_value:
+                    path_parts_break = True  # break the outer loop, we are done here.
                     break
                 remainder = '.'.join(path_parts[path_parts_index+1:])
                 mapped_value = [resolve_path_to_value(x, remainder) for x in mapped_value]
                 mapped_value = [value for found, value in mapped_value if found]
-                went_recursive = True  # break the outer loop, we are done here.
                 if not mapped_value:
                     found_value = False
+                path_parts_break = True  # break the outer loop, we are done here.
                 break
             else:
                 raise ValueError('Expected square brackets to have be either "[number]", "[key=value]", '
                                  '"[key~subkey=value]" or "[]". got: %r' % array_part)
-        if went_recursive:
-            break
-        if not found_value:
+        if path_parts_break:
             break
     return found_value, mapped_value
 
