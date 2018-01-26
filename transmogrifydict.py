@@ -49,6 +49,7 @@ def resolve_path_to_value(source, path):
     ...     'third_key' : [
     ...         {'c': 'asdf'},
     ...         {'b': 3},
+    ...         {'b': '5'},
     ...         {'h': 'qw"er'}
     ...     ],
     ...     'fourth_key': [
@@ -97,6 +98,8 @@ def resolve_path_to_value(source, path):
     (True, {'b': 3})
     >>> resolve_path_to_value(source_dict, 'third_key[b=4]')[0]
     False
+    >>> resolve_path_to_value(source_dict, 'third_key[b="5"]')
+    (True, {'b': '5'})
     >>> resolve_path_to_value(source_dict, 'third_key[h=qw"er]')
     (True, {'h': 'qw"er'})
     >>> resolve_path_to_value(source_dict, 'third_key[c=asdf].c')
