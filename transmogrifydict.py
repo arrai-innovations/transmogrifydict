@@ -13,7 +13,7 @@ TIDLE_SPLIT = re.compile(r'(?<!\\)(?:\\\\)*(~)')
 SINGLE_SLASH = re.compile(r'(?<!\\)(\\)')
 
 
-def non_quoted_split(regex, string):
+def _non_quoted_split(regex, string):
     indices = list(regex.finditer(string))
     retval = []
     for x, y in zip([None]+indices, indices+[None]):
@@ -21,7 +21,7 @@ def non_quoted_split(regex, string):
     return retval
 
 
-def un_slash_escape(string):
+def _un_slash_escape(string):
     return SINGLE_SLASH.sub('', string).replace('\\\\', '\\')
 
 
@@ -117,18 +117,18 @@ def resolve_path_to_value(source, path):
     found_value = True
     went_recursive = False
 
-    path_parts = non_quoted_split(PERIOD_SPLIT, path)
+    path_parts = _non_quoted_split(PERIOD_SPLIT, path)
 
     for path_parts_index, path_part_raw in enumerate(path_parts):
         # split on non quoted open bracket
 
-        parts = non_quoted_split(OPEN_SQUARE_BRACKET_SPLIT, path_part_raw)
+        parts = _non_quoted_split(OPEN_SQUARE_BRACKET_SPLIT, path_part_raw)
         key = parts[0]
         array = parts[1:]
         # future: when dropping python 2 support do this instead.
-        #key, *array = non_quoted_split(OPEN_SQUARE_BRACKET_SPLIT, path_part_raw)
+        #key, *array = _non_quoted_split(OPEN_SQUARE_BRACKET_SPLIT, path_part_raw)
 
-        key = un_slash_escape(key)
+        key = _un_slash_escape(key)
         try:
             if isinstance(mapped_value, six.string_types):
                 # ugh, maybe it is json?
@@ -154,11 +154,11 @@ def resolve_path_to_value(source, path):
             elif '=' in array_part:
                 # [Key=Value] or [Key~SubKey=Value]
                 # split on non quoted equals signs
-                equal_parts = non_quoted_split(EQUAL_SPLIT, array_part)
+                equal_parts = _non_quoted_split(EQUAL_SPLIT, array_part)
                 find_key = equal_parts[0]
                 find_value = equal_parts[1:]
                 # future: when dropping python 2 support do this instead.
-                #find_key, *find_value = non_quoted_split(EQUAL_SPLIT, array_part)
+                #find_key, *find_value = _non_quoted_split(EQUAL_SPLIT, array_part)
                 if len(find_value) >= 2:
                     raise ValueError('too many unquoted equals signs in square brackets for {}'.format(array_part))
                 find_value = find_value[0]
@@ -167,13 +167,13 @@ def resolve_path_to_value(source, path):
                 elif find_value.startswith('"') and find_value.endswith('"'):
                     find_value = find_value[1:-1]
                 if isinstance(find_value, six.string_types):
-                    find_value = un_slash_escape(find_value)
+                    find_value = _un_slash_escape(find_value)
                 for item in [mapped_value] if hasattr(mapped_value, 'keys') else mapped_value:
                     sub_item = item
-                    sub_keys = non_quoted_split(TIDLE_SPLIT, find_key)
+                    sub_keys = _non_quoted_split(TIDLE_SPLIT, find_key)
                     try:
                         while sub_keys:
-                            sub_key = un_slash_escape(sub_keys.pop(0))
+                            sub_key = _un_slash_escape(sub_keys.pop(0))
                             sub_item = sub_item[sub_key]
                     except (KeyError, IndexError):
                         pass
