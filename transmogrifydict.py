@@ -140,7 +140,7 @@ def resolve_path_to_value(source, path):
     >>> resolve_path_to_value(source_dict, 'seventh_key.bad_api[bad-squares]')
     Traceback (most recent call last):
         ...
-    ValueError: Expected square brackets to have be either "[number]", "[key=value]", "[key~subkey=value]" or "[]". got: 'bad-squares'
+    ValueError: Bad square brackets syntax on 'bad-squares'
     >>> resolve_path_to_value(source_dict, 'seventh_key.bad_api[a=b=c=]')
     Traceback (most recent call last):
         ...
@@ -179,7 +179,7 @@ def resolve_path_to_value(source, path):
         key = parts[0]
         array = parts[1:]
         # future: when dropping python 2 support do this instead.
-        #key, *array = _non_quoted_split(OPEN_SQUARE_BRACKET_SPLIT, path_part_raw)
+        # key, *array = _non_quoted_split(OPEN_SQUARE_BRACKET_SPLIT, path_part_raw)
 
         key = _un_slash_escape(key)
         try:
@@ -222,7 +222,7 @@ def resolve_path_to_value(source, path):
                 find_key = equal_parts[0]
                 find_value = equal_parts[1:]
                 # future: when dropping python 2 support do this instead.
-                #find_key, *find_value = _non_quoted_split(EQUAL_SPLIT, array_part)
+                # find_key, *find_value = _non_quoted_split(EQUAL_SPLIT, array_part)
                 if len(find_value) >= 2:
                     raise ValueError('too many unquoted equals signs in square brackets for {!r}'.format(array_part))
                 find_value = find_value[0]
@@ -269,8 +269,7 @@ def resolve_path_to_value(source, path):
                 path_parts_break = True  # break the outer loop, we are done here.
                 break
             else:
-                raise ValueError('Expected square brackets to have be either "[number]", "[key=value]", '
-                                 '"[key~subkey=value]" or "[]". got: %r' % array_part)
+                raise ValueError('Bad square brackets syntax on {!r}'.format(array_part))
         if path_parts_break:
             break
     return found_value, mapped_value
