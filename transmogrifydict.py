@@ -25,6 +25,102 @@ def _un_slash_escape(string):
     return SINGLE_SLASH.sub('', string).replace('\\\\', '\\')
 
 
+def _get_next_mapped_value_for_key(mapped_value, key, found_value, path_parts, path_parts_index, path_parts_break):
+    try:
+        if isinstance(mapped_value, six.string_types):
+            # ugh, maybe it is json?
+            try:
+                mapped_value = json.loads(mapped_value)
+            except ValueError:
+                raise ValueError(
+                    'string found when looking for dict-like object at {!r}. failed to convert to json.'.format(
+                        '.'.join(path_parts[:path_parts_index])
+                    )
+                )
+        if hasattr(mapped_value, 'keys'):
+            mapped_value = mapped_value[key]
+        else:
+            found_value = False
+            path_parts_break = True
+    except KeyError:
+        found_value = False
+        path_parts_break = True
+    return found_value, mapped_value, path_parts_break
+
+
+def _array_part_is_digit(mapped_value, array_part, key, path_parts, path_parts_index):
+    # [0]
+    try:
+        mapped_value = mapped_value[int(array_part)]
+    except KeyError:
+        raise ValueError('array expected at {!r}, found dict-like object.'.format(
+            '.'.join(path_parts[:path_parts_index] + [key])
+        ))
+    except IndexError:
+        raise IndexError('index {!r} out of range on array at {!r}.'.format(
+            int(array_part),
+            '.'.join(path_parts[:path_parts_index] + [key])
+        ))
+    return mapped_value
+
+
+def _array_part_is_key_or_sub_key_equal(found_value, mapped_value, array_part, path_parts_break):
+    # [Key=Value] or [Key~SubKey=Value]
+    # split on non quoted equals signs
+    array_part_break = False
+    equal_parts = _non_quoted_split(EQUAL_SPLIT, array_part)
+    find_key = equal_parts[0]
+    find_value = equal_parts[1:]
+    # future: when dropping python 2 support do this instead.
+    # find_key, *find_value = _non_quoted_split(EQUAL_SPLIT, array_part)
+    if len(find_value) >= 2:
+        raise ValueError('too many unquoted equals signs in square brackets for {!r}'.format(array_part))
+    find_value = find_value[0]
+    if find_value.isdigit():
+        find_value = int(find_value)
+    elif find_value.startswith('"') and find_value.endswith('"'):
+        find_value = find_value[1:-1]
+    if isinstance(find_value, six.string_types):
+        find_value = _un_slash_escape(find_value)
+    for item in [mapped_value] if hasattr(mapped_value, 'keys') else mapped_value:
+        sub_item = item
+        sub_keys = _non_quoted_split(TIDLE_SPLIT, find_key)
+        try:
+            while sub_keys:
+                sub_key = _un_slash_escape(sub_keys.pop(0))
+                sub_item = sub_item[sub_key]
+        except (KeyError, IndexError):
+            pass
+        else:
+            if sub_item == find_value:
+                mapped_value = item
+                break
+    else:
+        # raise KeyError('no item with %r == %r' % (find_key, find_value))
+        found_value = False
+        path_parts_break = True  # break the outer loop, we are done here.
+        array_part_break = True
+    return found_value, mapped_value, array_part_break, path_parts_break
+
+
+def _array_part_is_whole_array(found_value, mapped_value, key, path_parts, path_parts_index):
+    # empty []
+    if hasattr(mapped_value, 'keys'):
+        raise ValueError('array expected at {!r}, found dict-like object.'.format(
+            '.'.join(path_parts[:path_parts_index] + [key])
+        ))
+    if not mapped_value:
+        if path_parts[path_parts_index + 1:]:
+            found_value = False
+    else:
+        remainder = '.'.join(path_parts[path_parts_index + 1:])
+        mapped_value = [resolve_path_to_value(x, remainder) for x in mapped_value]
+        mapped_value = [value for found, value in mapped_value if found]
+        if not mapped_value:
+            found_value = False
+    return found_value, mapped_value
+
+
 def resolve_path_to_value(source, path):
     r"""
     fetch a value out of `source` using `path` as the pointer to the desired value.
@@ -182,90 +278,27 @@ def resolve_path_to_value(source, path):
         # key, *array = _non_quoted_split(OPEN_SQUARE_BRACKET_SPLIT, path_part_raw)
 
         key = _un_slash_escape(key)
-        try:
-            if isinstance(mapped_value, six.string_types):
-                # ugh, maybe it is json?
-                try:
-                    mapped_value = json.loads(mapped_value)
-                except ValueError:
-                    raise ValueError(
-                        'string found when looking for dict-like object at {!r}. failed to convert to json.'.format(
-                            '.'.join(path_parts[:path_parts_index])
-                        )
-                    )
-            if not hasattr(mapped_value, 'keys'):
-                found_value = False
-                break
-            mapped_value = mapped_value[key]
-        except KeyError:
-            found_value = False
+        found_value, mapped_value, path_parts_break = _get_next_mapped_value_for_key(
+            mapped_value, key, found_value, path_parts, path_parts_index, path_parts_break
+        )
+        if path_parts_break:
             break
         for array_part_raw in array:
             array_part = array_part_raw.strip(']')
             if array_part.isdigit():
-                # [0]
-                try:
-                    mapped_value = mapped_value[int(array_part)]
-                except KeyError:
-                    raise ValueError('array expected at {!r}, found dict-like object.'.format(
-                        '.'.join(path_parts[:path_parts_index] + [key])
-                    ))
-                except IndexError:
-                    raise IndexError('index {!r} out of range on array at {!r}.'.format(
-                        int(array_part),
-                        '.'.join(path_parts[:path_parts_index] + [key])
-                    ))
+                mapped_value = _array_part_is_digit(
+                    mapped_value, array_part, key, path_parts, path_parts_index
+                )
             elif '=' in array_part:
-                # [Key=Value] or [Key~SubKey=Value]
-                # split on non quoted equals signs
-                equal_parts = _non_quoted_split(EQUAL_SPLIT, array_part)
-                find_key = equal_parts[0]
-                find_value = equal_parts[1:]
-                # future: when dropping python 2 support do this instead.
-                # find_key, *find_value = _non_quoted_split(EQUAL_SPLIT, array_part)
-                if len(find_value) >= 2:
-                    raise ValueError('too many unquoted equals signs in square brackets for {!r}'.format(array_part))
-                find_value = find_value[0]
-                if find_value.isdigit():
-                    find_value = int(find_value)
-                elif find_value.startswith('"') and find_value.endswith('"'):
-                    find_value = find_value[1:-1]
-                if isinstance(find_value, six.string_types):
-                    find_value = _un_slash_escape(find_value)
-                for item in [mapped_value] if hasattr(mapped_value, 'keys') else mapped_value:
-                    sub_item = item
-                    sub_keys = _non_quoted_split(TIDLE_SPLIT, find_key)
-                    try:
-                        while sub_keys:
-                            sub_key = _un_slash_escape(sub_keys.pop(0))
-                            sub_item = sub_item[sub_key]
-                    except (KeyError, IndexError):
-                        pass
-                    else:
-                        if sub_item == find_value:
-                            mapped_value = item
-                            break
-                else:
-                    # raise KeyError('no item with %r == %r' % (find_key, find_value))
-                    found_value = False
-                    path_parts_break = True  # break the outer loop, we are done here.
+                found_value, mapped_value, array_part_break, path_parts_break = _array_part_is_key_or_sub_key_equal(
+                    found_value, mapped_value, array_part, path_parts_break
+                )
+                if array_part_break:
                     break
             elif array_part == '':
-                # empty []
-                if hasattr(mapped_value, 'keys'):
-                    raise ValueError('array expected at {!r}, found dict-like object.'.format(
-                        '.'.join(path_parts[:path_parts_index] + [key])
-                    ))
-                if not mapped_value:
-                    if path_parts[path_parts_index+1:]:
-                        found_value = False
-                    path_parts_break = True  # break the outer loop, we are done here.
-                    break
-                remainder = '.'.join(path_parts[path_parts_index+1:])
-                mapped_value = [resolve_path_to_value(x, remainder) for x in mapped_value]
-                mapped_value = [value for found, value in mapped_value if found]
-                if not mapped_value:
-                    found_value = False
+                found_value, mapped_value = _array_part_is_whole_array(
+                    found_value, mapped_value, key, path_parts, path_parts_index
+                )
                 path_parts_break = True  # break the outer loop, we are done here.
                 break
             else:
