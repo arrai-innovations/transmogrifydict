@@ -2,4 +2,3 @@ include LICENSE
 include transmogrifydict.png
 include README.md
 include requirements.txt
-global-exclude *.pyc
