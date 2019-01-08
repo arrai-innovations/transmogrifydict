@@ -11,9 +11,9 @@ The "map a dict from one API into a dict for another" python module.
 
 ![Flake8](https://docs.arrai-dev.com/transmogrifydict/master.flake8.svg)
 
-![Tests](https://docs.arrai-dev.com/transmogrifydict/develop.python37.svg) [![Coverage](https://docs.arrai-dev.com/argparse-color-formatter/develop.python37.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_develop_python37/)
+![Tests](https://docs.arrai-dev.com/transmogrifydict/develop.python37.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/develop.python37.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_develop_python37/)
 
-![Tests](https://docs.arrai-dev.com/transmogrifydict/develop.python27.svg) [![Coverage](https://docs.arrai-dev.com/argparse-color-formatter/develop.python27.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_develop_python27/)
+![Tests](https://docs.arrai-dev.com/transmogrifydict/develop.python27.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/develop.python27.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_develop_python27/)
 
 ![Flake8](https://docs.arrai-dev.com/transmogrifydict/develop.flake8.svg)
 
