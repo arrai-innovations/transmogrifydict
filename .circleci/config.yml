@@ -33,7 +33,7 @@ jobs:
           when: always
           command: |
             coverage html
-            coverage report | grep -oP '^TOTAL.*\d' | awk '{print $NF}' >> ~/.coveragep
+            coverage report | tail -1 | awk '{print substr($NF, 1, length($NF)-1)}' >> ~/.coveragep
       - utils/rsync_folder:
           when: always
           folder: ./htmlcov/
@@ -87,7 +87,7 @@ jobs:
           when: always
           command: |
             coverage html
-            coverage report | grep -oP '^TOTAL.*\d' | awk '{print $NF}' >> ~/.coveragep
+            coverage report | tail -1 | awk '{print substr($NF, 1, length($NF)-1)}' >> ~/.coveragep
       - utils/rsync_folder:
           when: always
           folder: ./htmlcov/
