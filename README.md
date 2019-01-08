@@ -4,12 +4,19 @@ The "map a dict from one API into a dict for another" python module.
 
 ![That dict is so cool...](/transmogrifydict.png)
 
-| Python | Branch | Build Status | Coverage Status |
-| ------ | ------ | ------------ | --------------- |
-| 2.7 | master | [![Python 2 Build Status](https://semaphoreci.com/api/v1/arrai-innovations/transmogrifydict-py2/branches/master/shields_badge.svg)](https://semaphoreci.com/arrai-innovations/transmogrifydict-py2/branches/master) | [![Python 2 Coverage](https://docs.arrai-dev.com/transmogrifydict/htmlcov_py2_master/coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_py2_master/) |
-| 2.7 | develop | [![Python 2 Build Status](https://semaphoreci.com/api/v1/arrai-innovations/transmogrifydict-py2/branches/develop/shields_badge.svg)](https://semaphoreci.com/arrai-innovations/transmogrifydict-py2/branches/develop) | [![Python 2 Coverage](https://docs.arrai-dev.com/transmogrifydict/htmlcov_py2_develop/coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_py2_develop/) |
-| 3.5 | master | [![Python 3 Build Status](https://semaphoreci.com/api/v1/arrai-innovations/transmogrifydict-py3/branches/master/shields_badge.svg)](https://semaphoreci.com/arrai-innovations/transmogrifydict-py3/branches/master) | [![Python 3 Coverage](https://docs.arrai-dev.com/transmogrifydict/htmlcov_py3_master/coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_py3_master/) |
-| 3.5 | develop | [![Python 3 Build Status](https://semaphoreci.com/api/v1/arrai-innovations/transmogrifydict-py3/branches/develop/shields_badge.svg)](https://semaphoreci.com/arrai-innovations/transmogrifydict-py3/branches/develop) | [![Python 3 Coverage](https://docs.arrai-dev.com/transmogrifydict/htmlcov_py3_develop/coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_py3_develop/) |
+
+![Tests](https://docs.arrai-dev.com/transmogrifydict/master.python37.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/master.python37.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_master_python37/)
+
+![Tests](https://docs.arrai-dev.com/transmogrifydict/master.python27.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/master.python27.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_master_python27/)
+
+![Flake8](https://docs.arrai-dev.com/transmogrifydict/master.flake8.svg)
+
+![Tests](https://docs.arrai-dev.com/transmogrifydict/develop.python37.svg) [![Coverage](https://docs.arrai-dev.com/argparse-color-formatter/develop.python37.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_develop_python37/)
+
+![Tests](https://docs.arrai-dev.com/transmogrifydict/develop.python27.svg) [![Coverage](https://docs.arrai-dev.com/argparse-color-formatter/develop.python27.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_develop_python27/)
+
+![Flake8](https://docs.arrai-dev.com/transmogrifydict/develop.flake8.svg)
+
 
 ## methods
 
