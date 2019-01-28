@@ -132,6 +132,7 @@ workflows:
       - flake8/flake8:
           name: flake8
           context: arrai-global
+          wd: ~/project
   weekly:
     jobs:
       - python27:
@@ -141,6 +142,7 @@ workflows:
       - flake8/flake8:
           name: flake8
           context: arrai-global
+          wd: ~/project
     triggers:
       - schedule:
           cron: "0 2 * * 1"
