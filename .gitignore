@@ -7,3 +7,4 @@ venvpy3
 .eggs
 .coverage
 htmlcov
+build
