@@ -27,7 +27,7 @@ executors:
     environment:
         LANG: en_US.UTF-8
     docker:
-     - image: circleci/python:3.8.0b3
+     - image: circleci/python:3.8.0b2
 jobs:
   python27:
     executor: python27
