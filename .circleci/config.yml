@@ -92,23 +92,23 @@ workflows:
   test:
     jobs:
       - pythontests:
-          name: py 2.7
+          name: python27
           context: arrai-global
           executor: python27
       - pythontests:
-          name: py 3.5
+          name: python35
           context: arrai-global
           executor: python35
       - pythontests:
-          name: py 3.6
+          name: python36
           context: arrai-global
           executor: python36
       - pythontests:
-          name: py 3.7
+          name: python37
           context: arrai-global
           executor: python37
       - pythontests:
-          name: py 3.8
+          name: python38
           context: arrai-global
           executor: python38
       - flake8/flake8:
@@ -118,23 +118,23 @@ workflows:
   weekly:
     jobs:
       - pythontests:
-          name: py 2.7
+          name: python27
           context: arrai-global
           executor: python27
       - pythontests:
-          name: py 3.5
+          name: python35
           context: arrai-global
           executor: python35
       - pythontests:
-          name: py 3.6
+          name: python36
           context: arrai-global
           executor: python36
       - pythontests:
-          name: py 3.7
+          name: python37
           context: arrai-global
           executor: python37
       - pythontests:
-          name: py 3.8
+          name: python38
           context: arrai-global
           executor: python38
       - flake8/flake8:
