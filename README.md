@@ -4,6 +4,7 @@ The "map a dict from one API into a dict for another" python module.
 
 ![That dict is so cool...](https://docs.arrai-dev.com/transmogrifydict/transmogrifydict.png)
 
+###### master
 
 ![Tests](https://docs.arrai-dev.com/transmogrifydict/master.python38.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/master.python38.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_master_python38/)
 
@@ -16,6 +17,8 @@ The "map a dict from one API into a dict for another" python module.
 ![Tests](https://docs.arrai-dev.com/transmogrifydict/master.python27.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/master.python27.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_master_python27/)
 
 ![Flake8](https://docs.arrai-dev.com/transmogrifydict/master.flake8.svg)
+
+###### develop
 
 ![Tests](https://docs.arrai-dev.com/transmogrifydict/develop.python38.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/develop.python38.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_develop_python38/)
 
