@@ -1,33 +1,33 @@
 version: 2.1
 orbs:
-  utils: arrai/utils@1.3.1
-  flake8: arrai/flake8@5.0.0
+  utils: arrai/utils@1.4.1
+  flake8: arrai/flake8@5.1.0
 executors:
   python27:
     environment:
-        LANG: en_US.UTF-8
+        LANG: C.UTF-8
     docker:
-     - image: circleci/python:2.7.15
+     - image: circleci/python:2.7
   python35:
     environment:
-        LANG: en_US.UTF-8
+        LANG: C.UTF-8
     docker:
-     - image: circleci/python:3.5.7
+     - image: circleci/python:3.5
   python36:
     environment:
-        LANG: en_US.UTF-8
+        LANG: C.UTF-8
     docker:
-     - image: circleci/python:3.6.9
+     - image: circleci/python:3.6
   python37:
     environment:
-        LANG: en_US.UTF-8
+        LANG: C.UTF-8
     docker:
-     - image: circleci/python:3.7.4
+     - image: circleci/python:3.7
   python38:
     environment:
-        LANG: en_US.UTF-8
+        LANG: C.UTF-8
     docker:
-     - image: circleci/python:3.8.0b2
+     - image: circleci/python:3.8
 jobs:
   pythontests:
     parameters:
@@ -92,25 +92,25 @@ workflows:
   test:
     jobs:
       - pythontests:
-          name: py 2.7
+          name: python27
           context: arrai-global
-          executors: python27
+          executor: python27
       - pythontests:
-          name: py 3.5
+          name: python35
           context: arrai-global
-          executors: python35
+          executor: python35
       - pythontests:
-          name: py 3.6
+          name: python36
           context: arrai-global
-          executors: python36
+          executor: python36
       - pythontests:
-          name: py 3.7
+          name: python37
           context: arrai-global
-          executors: python37
+          executor: python37
       - pythontests:
-          name: py 3.8
+          name: python38
           context: arrai-global
-          executors: python38
+          executor: python38
       - flake8/flake8:
           name: flake8
           context: arrai-global
@@ -118,25 +118,25 @@ workflows:
   weekly:
     jobs:
       - pythontests:
-          name: py 2.7
+          name: python27
           context: arrai-global
-          executors: python27
+          executor: python27
       - pythontests:
-          name: py 3.5
+          name: python35
           context: arrai-global
-          executors: python35
+          executor: python35
       - pythontests:
-          name: py 3.6
+          name: python36
           context: arrai-global
-          executors: python36
+          executor: python36
       - pythontests:
-          name: py 3.7
+          name: python37
           context: arrai-global
-          executors: python37
+          executor: python37
       - pythontests:
-          name: py 3.8
+          name: python38
           context: arrai-global
-          executors: python38
+          executor: python38
       - flake8/flake8:
           name: flake8
           context: arrai-global
