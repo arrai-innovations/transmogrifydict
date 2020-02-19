@@ -37,47 +37,51 @@ The "map a dict from one API into a dict for another" python module.
 
 ## methods
 
-*   `resolve_mapping_to_dict(mapping, source)` - move values from `source` into a returned dict, using `mapping` for paths and returned keys.
+### `resolve_mapping_to_dict(mapping, source)`
 
-    ```python
-    from transmogrifydict import resolve_mapping_to_dict
+move values from `source` into a returned dict, using `mapping` for paths and returned keys.
 
-    mapping = {
-        'a': 'd',
-        'b': 'e',
-        'c': 'f'
-    }
+```python
+from transmogrifydict import resolve_mapping_to_dict
 
-    source = {
-        'd': 1,
-        'e': 2,
-        'f': 3
-    }
+mapping = {
+    'a': 'd',
+    'b': 'e',
+    'c': 'f'
+}
 
-    resolve_mapping_to_dict(mapping, source)
-    # {
-    #     'a': 1,
-    #     'b': 2,
-    #     'c': 3,
-    # }
-    ```
+source = {
+    'd': 1,
+    'e': 2,
+    'f': 3
+}
 
-*   `resolve_path_to_value(source, path)` - fetch a value out of `source` using `path` as the pointer to the desired value. see docstring for path string formats.
+resolve_mapping_to_dict(mapping, source)
+# {
+#     'a': 1,
+#     'b': 2,
+#     'c': 3,
+# }
+```
 
-    ```python
-    from transmogrifydict import resolve_path_to_value
+### `resolve_path_to_value(source, path)`
 
-    source = {
-        'd': 1,
-        'e': 2,
-        'f': 3
-    }
+fetch a value out of `source` using `path` as the pointer to the desired value. see docstring for path string formats.
 
-    found, value = resolve_path_to_value(source, 'e')
+```python
+from transmogrifydict import resolve_path_to_value
 
-    print((found, value))
-    # (True, 2)
-    ```
+source = {
+    'd': 1,
+    'e': 2,
+    'f': 3
+}
+
+found, value = resolve_path_to_value(source, 'e')
+
+print((found, value))
+# (True, 2)
+```
 
 ## `path` or `mapping` value format
 ```python
