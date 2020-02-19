@@ -4,6 +4,8 @@ The "map a dict from one API into a dict for another" python module.
 
 ![That dict is so cool...](https://docs.arrai-dev.com/transmogrifydict/transmogrifydict.png)
 
+[![PYPI](https://img.shields.io/pypi/v/transmogrifydict?style=for-the-badge)](https://pypi.org/project/transmogrifydict/)
+
 ###### master
 
 ![Tests](https://docs.arrai-dev.com/transmogrifydict/master.python38.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/master.python38.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_master_python38/)
