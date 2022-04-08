@@ -28,7 +28,7 @@ The "map a dict from one API into a dict for another" python module.
 
 ![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python310.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python310.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/htmlcov_python310/)
 
-![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python39.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python39.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/htmlcov_python39/)
+![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python39.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python39.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/htmlcov_python39/)
 
 ![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python38.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python38.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/htmlcov_python38/)
 
