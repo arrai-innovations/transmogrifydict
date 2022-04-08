@@ -162,7 +162,7 @@ def resolve_path_to_value(source, path):
     ...         {'b.c': '9.a'},
     ...         {'b[c': '9[a'},
     ...         {'b]c': '9]a'},
-    ...         {'b\c': '9\\a'},
+    ...         {'b\\c': '9\\a'},
     ...     ],
     ...     'sixth_key': {
     ...         'a': [
