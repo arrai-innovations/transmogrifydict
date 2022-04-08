@@ -8,6 +8,8 @@ The "map a dict from one API into a dict for another" python module.
 
 ###### master
 
+![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python310.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python310.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/htmlcov_python310/)
+
 ![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python39.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python39.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/htmlcov_python39/)
 
 ![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python38.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python38.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/htmlcov_python38/)
@@ -23,6 +25,8 @@ The "map a dict from one API into a dict for another" python module.
 ![Flake8](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/flake8.svg)
 
 ###### develop
+
+![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python310.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python310.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/htmlcov_python310/)
 
 ![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python39.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python39.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/htmlcov_python39/)
 
