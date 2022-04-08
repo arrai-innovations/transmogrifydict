@@ -8,31 +8,31 @@ The "map a dict from one API into a dict for another" python module.
 
 ###### master
 
-![Tests](https://docs.arrai-dev.com/transmogrifydict/master.python38.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/master.python38.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_master_python38/)
+![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python38.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python38.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/htmlcov_python38/)
 
-![Tests](https://docs.arrai-dev.com/transmogrifydict/master.python37.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/master.python37.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_master_python37/)
+![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python37.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python37.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/htmlcov_python37/)
 
-![Tests](https://docs.arrai-dev.com/transmogrifydict/master.python36.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/master.python36.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_master_python36/)
+![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python36.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python36.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/htmlcov_python36/)
 
-![Tests](https://docs.arrai-dev.com/transmogrifydict/master.python35.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/master.python35.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_master_python35/)
+![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python35.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python35.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/htmlcov_python35/)
 
-![Tests](https://docs.arrai-dev.com/transmogrifydict/master.python27.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/master.python27.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_master_python27/)
+![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python27.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/python27.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/htmlcov_python27/)
 
-![Flake8](https://docs.arrai-dev.com/transmogrifydict/master.flake8.svg)
+![Flake8](https://docs.arrai-dev.com/transmogrifydict/artifacts/master/flake8.svg)
 
 ###### develop
 
-![Tests](https://docs.arrai-dev.com/transmogrifydict/develop.python38.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/develop.python38.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_develop_python38/)
+![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python38.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python38.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/htmlcov_python38/)
 
-![Tests](https://docs.arrai-dev.com/transmogrifydict/develop.python37.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/develop.python37.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_develop_python37/)
+![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python37.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python37.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/htmlcov_python37/)
 
-![Tests](https://docs.arrai-dev.com/transmogrifydict/develop.python36.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/develop.python36.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_develop_python36/)
+![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python36.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python36.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/htmlcov_python36/)
 
-![Tests](https://docs.arrai-dev.com/transmogrifydict/develop.python35.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/develop.python35.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_develop_python35/)
+![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python35.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python35.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/htmlcov_python35/)
 
-![Tests](https://docs.arrai-dev.com/transmogrifydict/develop.python27.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/develop.python27.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/htmlcov_develop_python27/)
+![Tests](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python27.svg) [![Coverage](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/python27.coverage.svg)](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/htmlcov_python27/)
 
-![Flake8](https://docs.arrai-dev.com/transmogrifydict/develop.flake8.svg)
+![Flake8](https://docs.arrai-dev.com/transmogrifydict/artifacts/develop/flake8.svg)
 
 
 ## methods
