@@ -7,7 +7,7 @@ with open('./requirements.txt') as reqs:
 setup(
     name='transmogrifydict',
     url='https://github.com/arrai-innovations/transmogrifydict',
-    version='1.1.3.post1',
+    version='1.1.3.post2',
     description='The "turn a dict from one API into a dict for another" python module.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -24,6 +24,8 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'License :: OSI Approved :: BSD License',
         'Intended Audience :: Developers',
     ]
